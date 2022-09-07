@@ -1,0 +1,10 @@
+En utilisant gdb on voit que le programme est tres simple, un main qui alloue un peu sur la stack et une fonction run qui fait un fwrite() et un system("/bin/sh"). Bien entendu le binaire appartient a level2, donc si on arrive a ouvrir le shell on pourra affiche le .pass
+C'est mon premier cas de buffer overflow a exploiter. Apres avoir apris, c'est un cas extrement basique, on a carrement un appel direct pour ouvrir un shell. Il suffit donc de provoquer un overflow qui va faire executer run() apres gets() au lieu de return. Pour cela, il faut overflow juste ce qu'il faut pour ecrire l'adresse de run() dans le registre eip.
+On a deux methodes pour trouver la taille du buffer, soit en soustrayant les adresses de la stack soit en testant un peu au hasard. On voit dans le code sub esp,0x50 ce qui fait 80 (+ l'alignement). On teste donc d'envoyer 80 'A', puis on ajuste pour trouver la bonne taille.
+Ca nous donne un buffer de 72 bytes, les 4 suivants = ebp, les 4 suivants = eip.
+Il faut donc ecrire 76 'A' puis l'adresse de run derriere.
+Lorsqu'on fait ca, on rentre bien dans run(), cependant le shell ne reste pas ouvert.
+Pour le garder ouvert,
+ cat "$str ou fichier qui contient $str" -
+Il suffit ensuite de rediriger l'entree vers level1 puisque celui ci lit sur stdin
+cat $str - | ./level1
