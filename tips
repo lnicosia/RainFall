@@ -1,6 +1,6 @@
 python -c 'print "c"*100 + "Coucou"'
-Dans gdb: r < <(python ...)
+perl -e 'print "c"*100 . "Coucou"'
+Dans gdb: run < <(python ...)
 Pour maintenir l'entree standard ouverte: cat file - |
 Pour ecrire une adresse hex little-endian en ascii avec perl:
 	print scalar reverse pack "H*", "addr"
-Pour concatener des chaines avec perl: print chaine1 . chaine 2
