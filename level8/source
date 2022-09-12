@@ -1,0 +1,52 @@
+int main(void)
+{
+  char c;
+  char c2;
+  char *str1;
+  char *str2;
+  char *str3;
+  bool bool1;
+  bool bool2;
+  uint nb;
+  int i;
+  int nb2;
+  int nb3;
+  int nb4;
+  char buf[5];
+  char buff2[2];
+  char buff3[125];
+  
+  c2 = 0;
+  do {
+
+    printf("%p, %p \n", auth, service);
+    str1 = fgets(buf, 128, stdin);
+
+	if (str1 == NULL)
+		return 0;
+    if (strncmp(buf, "auth ", 5) == 0) {
+      auth = (int *)malloc(4);
+      *auth = 0;
+      if (strlen(buff2) < 31) {
+        strcpy(auth, buff2);
+      }
+    }
+
+    if (strncmp(buf, "reset", 5) == 0) {
+      free(auth);
+    }
+
+    if (strncmp(buf, "service", 6) == 0) {
+      service = strdup(buff3);
+    }
+
+    if (strncmp(buf, "login", 5) == 0) {
+      if (auth[8] == 0) {
+        fwrite("Password:\n",1,10,stdout);
+      }
+      else {
+        system("/bin/sh");
+      }
+    }
+  } while( true );
+}
