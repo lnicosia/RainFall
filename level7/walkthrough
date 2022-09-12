@@ -1,0 +1,7 @@
+malloc(8)                                              = 0x0804a008
+malloc(8)                                              = 0x0804a018
+malloc(8)                                              = 0x0804a028
+malloc(8)                                              = 0x0804a038
+Addresse de GOT de puts sur la stack = 0x8049928
+Avec le premier strcpy on overflow pour ecrire la ou le deuxieme strcpy va chercher dest. On ecrit l'addresse de GOT de puts.
+Avec le deuxieme strcpy on ecrit l'addresse de m() comme ca puts va appeler m().

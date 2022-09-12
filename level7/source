@@ -1,0 +1,31 @@
+void m(void *param_1,int param_2,char *param_3,int param_4,int param_5)
+{
+  time_t t;
+  
+  t = time(NULL);
+  printf("%s - %d\n", c, t);
+  return;
+}
+
+int main(int ac, char **av)
+{
+  int *a;
+  void *ptr;
+  int *b;
+  FILE *stream;
+  
+  a = (int)malloc(8);
+  a[1] = 1;
+  ptr = malloc(8);
+  a[1] = ptr;
+  b = (int)malloc(8);
+  b[1] = 2;
+  ptr = malloc(8);
+  b[1] = ptr;
+  strcpy(&a[1], av[1]);
+  strcpy(&b[1], av[2]);
+  stream = fopen("/home/user/level8/.pass", "r");
+  fgets(c, 68, stream);
+  puts("~~");
+  return 0;
+}
