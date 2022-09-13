@@ -7,7 +7,7 @@ void p(char *str1, char *str2)
 	read(0, buf, 4096);
 	backslashNptr = strchr(buf, '\n');
 	*backslashNptr = '\0';
-	strncpy(str1, buf, 32);
+	strncpy(str1, buf, 20);
 	return;
 }
 
@@ -19,7 +19,7 @@ void pp(char *str)
 	p(buf1, " - ");
 	p(buf2, " - ");
 	strcpy(str, buf1);
-	*(undefined2 *)(str + strlen(str)) = 32;
+	str[strlen(str) - 1] = ' ';
 	strcat(str, buf2);
 	return;
 }
