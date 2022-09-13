@@ -1,0 +1,35 @@
+void p(char *str1, char *str2)
+{
+	char *backslashNptr;
+	char buf [4104];
+
+	puts(str2);
+	read(0, buf, 4096);
+	backslashNptr = strchr(buf, '\n');
+	*backslashNptr = '\0';
+	strncpy(str1, buf, 32);
+	return;
+}
+
+void pp(char *str)
+{
+	char buf1 [20];
+	char buf2 [20];
+
+	p(buf1, " - ");
+	p(buf2, " - ");
+	strcpy(str, buf1);
+	*(undefined2 *)(str + strlen(str)) = 32;
+	strcat(str, buf2);
+	return;
+}
+
+
+int main(void)
+{
+	char buf [54];
+
+	pp(buf);
+	puts(buf);
+	return 0;
+}
