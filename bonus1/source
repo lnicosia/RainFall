@@ -1,0 +1,21 @@
+int main(int param_1, char **av)
+
+{
+	int uVar1;
+	char buf [40];
+	int nb;
+
+	nb = atoi(av[1]);
+	if (nb < 10) {
+		memcpy(buf, av[2], nb * 4);
+		if (nb == 0x574f4c46) {
+			execl("/bin/sh", "sh", 0);
+		}
+		uVar1 = 0;
+	}
+	else {
+		uVar1 = 1;
+	}
+	return uVar1;
+}
+
