@@ -1,0 +1,9 @@
+On veut faire un petit memcpy, juste suffisant pour écraser la sauvegarde de eip.
+De part la manière dont sont représentés les entiers dans la mémoire, lorsqu'on envoie une petite valeur négative, par exemple -20, on obtient 0xffffffec.
+Une fois multiplié par 4, le nombre redevient positif mais vaut 0xffffffb0 / 4294967216.
+Pour obtenir une petite valeur négative après le x4, j'en déduis qu'il faut envoyer une très grosse valeur négative.
+En effet lorsqu'on envoie INT_MIN - N, on obtient Nx4 comme taille après la multiplication
+Je calcule la distance entre le début du buffer et nb sur la stack: 44.
+Il faut donc envoyer INT_MAX - 44/4, ie INT_MAX - 11, ie -2147483637
+On a ensuite juste a ecrire 40x 'A' puis le nombre auquel doit être égal nb, 0x574f4c46
+./bonus1 -2147483637 $(perl -le 'print "A"x40 . "\x46\x4c\x4f\x57"')
