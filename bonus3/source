@@ -1,0 +1,22 @@
+int main(int ac,char **av)
+{
+	int nb;
+	undefined4 str1 [66];
+	char str2 [65];
+	FILE *f;
+
+	f = fopen("/home/user/end/.pass","r");
+	bzero(str1, 33);
+	if ((f == NULL) || (ac != 2))
+		return -1;
+	fread(str1, 1, 66, f);
+	nb = atoi(av[1]);
+	str1[nb] = 0;
+	fread(str2, 1, 65, f);
+	fclose(f);
+	if (strcmp(str1, av[1]) == 0)
+		execl("/bin/sh","sh",0);
+	else
+		puts(str2);
+	return 0;
+}

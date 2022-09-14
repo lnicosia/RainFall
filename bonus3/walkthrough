@@ -1,0 +1,3 @@
+atoi("") = 0
+strcmp("", av[1])
+-> exec
