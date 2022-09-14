@@ -1,76 +1,51 @@
 void greetuser(void)
 {
-	undefined4 local_4c;
-	undefined4 local_48;
-	undefined4 local_44;
-	undefined4 local_40;
-	undefined2 local_3c;
-	undefined local_3a;
+	char *str;
 
 	if (language == 1) {
-		local_4c = 0xc3767948;
-		local_48 = 0x20a4c3a4;
-		local_44 = 0x69a4c370;
-		local_40 = 0xc3a4c376;
-		local_3c = 0x20a4;
-		local_3a = 0;
+		str = "Hyvää päivää ";
 	}
 	else if (language == 2) {
-		local_4c = 0x64656f47;
-		local_48 = 0x64696d65;
-		local_44 = 0x21676164;
-		local_40 = CONCAT22(local_40._2_2_,0x20);
+		str = "Goedemiddag! ";
 	}
 	else if (language == 0) {
-		local_4c = 0x6c6c6548;
-		local_48 = CONCAT13(local_48._3_1_,0x206f);
+		str = "Hello ";
 	}
-	strcat((char *)&local_4c,&stack0x00000004);
-	puts((char *)&local_4c);
+	strcat(str, main:buf);
+	puts(str);
 	return;
 }
 
 
 int main(int ac,char **av)
 {
-	int i;
-	undefined4 *puVar2;
-	undefined4 *puVar3;
-	byte bVar4;
-	char buf[10];
-	char acStack56[36];
+	int ret;
+	char buf[40];
+	char buf2[32];
 	char *lang;
 
-	bVar4 = 0;
 	if (ac == 3) {
-		puVar2 = buf;
 		bzero(buf, 19);
 		strncpy(buf, av[1], 40);
-		strncpy(acStack56, av[2], 32);
+		strncpy(buf2, av[2], 32);
 		lang = getenv("LANG");
 		if (lang != NULL) {
-			i = memcmp(lang, "fi", 2);
-			if (i == 0) {
+			ret = memcmp(lang, "fi", 2);
+			if (ret == 0) {
 				language = 1;
 			}
 			else {
-				i = memcmp(lang, "nl", 2);
-				if (i == 0) {
+				ret = memcmp(lang, "nl", 2);
+				if (ret == 0) {
 					language = 2;
 				}
 			}
 		}
-		puVar2 = buf;
-		puVar3 = (undefined4 *)&stack0xffffff50;
-		for (i = 19; i != 0; i--) {
-			*puVar3 = *puVar2;
-			puVar2 = puVar2 + (uint)bVar4 * -2 + 1;
-			puVar3 = puVar3 + (uint)bVar4 * -2 + 1;
-		}
-		i = greetuser();
+		strncpy(stack+0x0, buf, 19); // Copie au début de la stack
+		greetuser();
 	}
 	else {
-		i = 1;
+		return 1;
 	}
-	return i;
+	return 0;
 }
