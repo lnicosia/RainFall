@@ -1,0 +1,16 @@
+Ici encore le code est un peu complexe mais une fois décortiqué,
+voici ce qu'il fait:
+Demande un input en boucle et réagit lorsqu'on lui envoie
+une des 4 strings suivantes:
+"auth ": malloc la chaine auth et y copie des données aléatoires
+"reset": free la chaine auth
+"service": malloc la chaine service et y copie des données aléatoires
+"login": le byte situé 32 octets après la chaine auth est différent de 0,
+ouvre un shell. Sinon il affiche "Password:\n"
+Il faut donc essayer d'écrire quelque chose 32 octets après la chaine auth
+Pour cela il faut appeler au moins une fois "auth " pour que la chaîne existe
+Ensuite, il faut utiliser "service" qui va créer une autre chaîne plus loin
+dans la heap. On constate que si on appelle "service" une seule fois, il n'y
+a pas eu assez de données écrites et auth+32 contient toujours 0.
+En appelant "service" une deuxième fois, on est bon. On écrit "login"
+et un shell s'ouvre

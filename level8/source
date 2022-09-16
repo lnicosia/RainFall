@@ -42,7 +42,7 @@ int main(void)
 
     if (strncmp(buf, "login", 5) == 0) {
       if (auth + 32 == 0) {
-        fwrite("Password:\n",1,10,stdout);
+        fwrite("Password:\n", 1, 10, stdout);
       }
       else {
         system("/bin/sh");
