@@ -1,11 +1,2 @@
-Je commence comme pour SnowCrash par ls, je vois l'executable level0 qui appartient a level1
-Quand on le lance sans arg ça segfault
-Je connais pas bien les exploit de la mémoire alors je commence par la seule chose que je sais faire:
-gdb level0
-Le code est assez facile à lire (cf source)
-Je vois un call à atoi, juste ensuite un cmp à 1a7 (423) en décimal. Si c'est pas egal, ca jmp a
-la fin du code, ca print "No !" et ca return.
-Effectivement quand on lance avec un arg ça segfault plus et ça affiche "No !". Je test avec 423,
-bingo ça ouvre un shell (il y a un call à execv("/bin/sh") dans le code)
-Avec tous les setuid du code je me doute que je vais avoir des droits. Je vérifie, `whoami`, je suis bien level1
-cat /home/user/level1/.pass donne le flag
+Une fois le code source reverse, c'est extrèmement simple:
+Si on envoie 423 en argument du programme, un shell est exécuté avec les droits du user voulu.
