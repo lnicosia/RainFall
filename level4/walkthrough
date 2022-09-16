@@ -1,0 +1,22 @@
+Ici exactement la même chose que l'exo d'avant sauf que <m> doit cette fois
+être égal à 0x1025544.
+En faisant la même chose que l'exo d'avant, on va se retrouver bloqués
+Comme on ne peut pas écrire 0x1025544 chars d'un coup avec printf,
+on va devoir le faire en 2 fois, en écrivant les bytes 2 par 2
+au lieu de 4 par 4.
+Si on coupe 0x1025544 en deux, on obtient 0x102 et 0x5544. On peut écrire 
+ça en 2 fois alors que 0x1025544 est trop gros.
+On peut écrire 2 bytes à la fois grâce au spécifieur de taille de printf
+en écrivant %hn au lieu de %n.
+Il faut donc aussi écrire deux fois l'adresse, une fois pour ses 2 premiers
+bytes et une fois pour les 2 derniers bytes (donc l'adresse + 2)
+Comme la valeur écrite par %n augmente à chaque appel, il faut d'abord
+écrire la partie la plus petite, 0x102, 258 en décimal.
+On commence donc par écrire 258 dans les 2 premiers bytes de <m>, ce
+qui donne
+<(perl -e 'print "\x12\x98\x04\x08" . "\x10\x98\x04\x08" . "%250d" . "%12\$hn"')
+Il nous reste à écrire la deuxième partie, 0x5544, 21828 en décimal dans
+la deuxième adresse
+On a déjà écrit 258 caractères, il nous reste 21828-258 = 21570 à écrire
+Cela nous donne
+./level4 < <(perl -e 'print "\x12\x98\x04\x08" . "\x10\x98\x04\x08" . "%250d" . "%12\$hn" . "%21570d" . "%13\$hn"')
