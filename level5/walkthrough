@@ -1,0 +1,26 @@
+Ici encore, le code source est simple. On récupère notre string avec
+un fgets de 512 puis on la print avec un printf() mal formaté.
+Cependant cette fois ci le programme exit juste après le printf.
+On ne peut vraiment pas éviter ce exit(). Si on disas exit, on se
+rend compte que le programme ne fait que jump sur une valeur constante
+qui contient le vrai code d'exit:
+Dump of assembler code for function exit@plt:
+   0x080483d0 <+0>:	jmp    DWORD PTR ds:0x8049838
+   0x080483d6 <+6>:	push   0x28
+   0x080483db <+11>:	jmp    0x8048370
+C'est en réalité la table GOT qui contient les adresses des fonctions de 
+la libc chargées dynamiquement.
+Il est assez simple avec le format string exploit d'aller écraser
+cette valeur et la remplacer par celle de la fonction o() qui ouvrira
+le shell pour nous.
+L'adresse de o() est 0x080484a4, il va donc une fois de plus falloir
+le faire en 2 fois, 2 octets par 2 octets.
+On écrit donc l'adresse de la constante deux fois en décalant de 2 bytes,
+0x0804938 et 0x080493a.
+On écrit les 2 premiers bytes de l'adresse de o() (0x0804, 2052 en deci)
+à la première adresse et les 2 suivants (0x84a4, 33956 en deci)
+à la deuxième.
+Ici, notre string va se retrouver à la 4è adresse dans la stack,
+donc %4$hn et %5$hn pour y écrire. Ne pas oublier d'inverser, donc 5 puis 4
+Cela nous donne en laissant stdin ouvert:
+cat <(perl -e 'print "\x38\x98\x04\x08" . "\x3a\x98\x04\x08" . "%2044d" . "%5\$hn" . "%31904d" . "%4\$hn"') - | ./level5
