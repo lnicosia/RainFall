@@ -1,31 +1,31 @@
 void N::N(int nb)
 {
-  *(undefined ***)this = &PTR_operator+_08048848;
-  *(int *)(this + 0x68) = nb;
-  return;
+	*this = 0x8048848; // Constante
+	*(this + 0x68) = nb;
+	return;
 }
 
 void N::setAnnotation(char *str)
 {
-  size_t len;
-  
-  len = strlen(str);
-  memcpy(this + 4, str, len);
-  return;
+	size_t len;
+
+	len = strlen(str);
+	memcpy(this + 4, str, len);
+	return;
 }
 
 void main(int ac, char **av)
 {
-  N *this;
-  int *ptr;
+	N *_Ns;
+	int *ptr;
 
-  if (ac < 2)
-    _exit(1);
-  this = new N[108];
-  this->N(5);
-  ptr = new int[108];
-  (N*)ptr->N(6);
-  this->setAnnotation(av[1]);
-  (**(code **)*ptr)(ptr, this);
-  return 0;
+	if (ac < 2)
+		_exit(1);
+	_Ns = new N[108];
+	_Ns->N(5);
+	ptr = new int[108];
+	(N*)ptr->N(6);
+	_Ns->setAnnotation(av[1]);
+	(**(code **)*ptr)(ptr, _Ns);
+	return 0;
 }
