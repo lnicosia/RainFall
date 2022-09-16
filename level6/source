@@ -1,3 +1,5 @@
+int m;
+
 void m(void *param_1, int param_2, char *param_3, int param_4, int param_5)
 {
   puts("Nope");
@@ -13,12 +15,12 @@ void n(void)
 void main(int ac, char **av)
 {
   char *dest;
-  void **func;
+  void *func;
   
   dest = (char *)malloc(64);
-  func = (void **)malloc(4);
-  *func = m;
+  func = malloc(4);
+  func = &m;
   strcpy(dest, av[1]);
-  (**func)();
+  func();
   return;
 }
