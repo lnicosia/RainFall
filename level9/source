@@ -1,8 +1,8 @@
-void N::N(int nb)
+N* N::N(int nb)
 {
 	*this = 0x8048848; // Constante
-	*(this + 0x68) = nb;
-	return;
+	*(this + 104) = nb;
+	return this;
 }
 
 void N::setAnnotation(char *str)
@@ -16,16 +16,16 @@ void N::setAnnotation(char *str)
 
 void main(int ac, char **av)
 {
-	N *_Ns;
-	int *ptr;
+	N *N1;
+	N *N2;
 
 	if (ac < 2)
 		_exit(1);
-	_Ns = new N[108];
-	_Ns->N(5);
-	ptr = new int[108];
-	(N*)ptr->N(6);
-	_Ns->setAnnotation(av[1]);
-	(**(code **)*ptr)(ptr, _Ns);
+	N1 = new N; // N class = 108 bytes
+	N1->N(5);
+	N2 = new N; // N class = 108 bytes again
+	N2->N(6);
+	N1->setAnnotation(av[1]);
+	(**N2)(N2, N1);
 	return 0;
 }
