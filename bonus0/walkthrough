@@ -1,1 +1,19 @@
 <(perl -le 'print "A"x20' . "\n"; perl -le 'print "B"x9 . "\x78\xf8\xff\xbf" . "B"x7 . "\n"')
+Sur cet exo il faut un peu plus de temps pour décortiquer le code
+On a 3 buffers, un dans le main et 2 dans p(). Le programme demande 2 inputs l'un après l'autre.
+Ils sont copiés respectivement dans les 2 buffers de p(). La copie est protégée, 20 bytes seulement,
+cependant avant de copier le programme cherche et remplace le premier '\n' de chaque buffer par un '\0'.
+Cette partie est importante, car après avoir copié les 2 inputs dans leur buffer de 20 bytes, le programme
+strcpy le premier puis strcat le second dans le buffer du main.
+Si les inputs ne contiennent pas de '\n' dans les 20 premiers chars, les buffers ne contiendront donc
+pas de '\0' et le strcpy et le strcat ne vont pas s'arrêter à la fin prévue des buffers (20 bytes).
+Ils vont continuer jusqu'au premier '\0' présent dans le mémoire, ce qui est plus ou moins aléatoire
+
+On overflow le buffer du main en mettant + de 20 chars dans chaque entrée. Il faut tout de même mettre
+un '\n' derrière sinon le strchr crash
+On constate que si la première est remplie de A, quelques octets de plus seulement vont être strcpy car un 0 est
+présent peu après dans la mémoire. 
+Plutôt que de compter exactement et de me prendre la tête, je fais des tests pour voir jusqu'où le buffer
+est overflow. On voit qu'il est assez simple d'aller jusqu'à la sauvegarde d'eip du main.
+Après quelques tests, je trouve les bonnes valeurs pour overflow exactement jusqu'à cet endroit:
+

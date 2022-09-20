@@ -27,7 +27,7 @@ void pp(char *str)
 
 int main(void)
 {
-	char buf [54];
+	char buf [52];
 
 	pp(buf);
 	puts(buf);
