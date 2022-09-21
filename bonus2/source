@@ -1,4 +1,6 @@
-void greetuser(void)
+int	language;
+
+void greetuser(char *lang_str)
 {
 	char *str;
 
@@ -23,11 +25,13 @@ int main(int ac,char **av)
 	char buf[40];
 	char buf2[32];
 	char *lang;
+	char *lang_str;
 
 	if (ac == 3) {
 		bzero(buf, 19);
 		strncpy(buf, av[1], 40);
 		strncpy(buf2, av[2], 32);
+		lang_str = "LANG";
 		lang = getenv("LANG");
 		if (lang != NULL) {
 			ret = memcmp(lang, "fi", 2);
@@ -41,8 +45,8 @@ int main(int ac,char **av)
 				}
 			}
 		}
-		strncpy(stack+0x0, buf, 19); // Copie au début de la stack
-		greetuser();
+		strncpy(stack, buf, 19); // Copie au début de la stack
+		greetuser(lang_str);
 	}
 	else {
 		return 1;
