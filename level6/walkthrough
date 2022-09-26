@@ -1,10 +1,10 @@
 Encore un code assez simple, ici on a deux malloc et une copie sans 
 protection de notre av[1] dans la première adresse.
-Ensuite, le programme call l'adresse contenue dans la 2e adresse.
-Si on donne une chaîne plus grosse que le premier malloc, on va overflow
-et écrire dans l'adresse du deuxième. Or, celle-ci est ensuite exécutée
+Ensuite, le programme call la fonction contenue à la 2e adresse.
+Si av[1] est une chaîne plus grosse que la taille du premier malloc, on va overflow
+et écrire dans la zone du deuxième. Or, ce qui y est contenu est ensuite exécuté
 en tant que fonction par le programme. On peut donc mettre ici
-l'adresse que l'on veut voir exécutée par le prog.
+l'adresse que l'on veut voir exécutée.
 Addresse de dest = 0x0804a008
 Addresse de func = 0x0804a050
 Il y a 72 de diff entre les deux, on va donc mettre ça de padding puis 

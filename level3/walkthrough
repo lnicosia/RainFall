@@ -1,18 +1,17 @@
 Une fois reverse, le code est très simple: 
 Il récupère notre input juqu'à 512 avec fgets() puis le printf() tel quel.
-Si une certaine variable globale <m> est égale à 64, un shell est ouvert.
-C'est un cas très basique de format string exploit. Le print() est mal formaté, on peut l'utiliser pour écrire ce que l'on veut où l'on veut dans la mémoire grâce au %n.
+Si une variable globale <m> est égale à 64, un shell est ouvert.
+C'est un cas très basique de format string exploit. Le printf() est mal formaté, on peut l'utiliser pour écrire ce que l'on veut où l'on veut dans la mémoire grâce au %n.
 En l'occurrence, on va écrire 64 dans <m>
 Pour cela, on écrit l'adresse de m dans notre input, soit 0x804988c
 Ensuite, on écrit plein de %x pour afficher le contenu de la stack en hexa.
-On trouve que notre string est stockée 4 plus loin sur la stack.
+On trouve que notre string est stockée 4 adresses plus loin sur la stack.
 On la retrouve plus facilement grâce à un "%4$x".
 Utiliser %n va écrire le nombre de byte que printf a affiché jusqu'à maintenant à la prochaine adresse présente sur la stack.
 Mais on veut écrire à la 4è adresse dans la stack.
 Pour cela, il faut comme pour le %x utiliser le '$' -> "%4$n".
 On veut écrire 64 à cette adresse, il faut donc qu'il y ait 64 caractères
 dans le printf avant le %n. Il y a déjà l'adresse qui fait 4 caractères,
-il suffit d'en rajouter 60, soit en écrivant 60 'A' par exemple,
-soit en utilisant le padding de printf: %60d.
+il suffit d'en rajouter 60, soit en écrivant 60 'A', soit en utilisant le padding de printf: %60d.
 En gardant stdin ouvert, cela donne
-cat <(perl -e 'print "\x8c\x98\x04\x08" . "%60d" . "%4\$n"')
+cat <(perl -e 'print "\x8c\x98\x04\x08" . "%60d" . "%4\$n"') - | ./level3

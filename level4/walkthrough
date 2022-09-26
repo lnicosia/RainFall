@@ -1,9 +1,9 @@
 Ici exactement la même chose que l'exo d'avant sauf que <m> doit cette fois
 être égal à 0x1025544.
-En faisant la même chose que l'exo d'avant, on va se retrouver bloqués
+En faisant la même chose que l'exo d'avant, on va se retrouver bloqué
 Comme on ne peut pas écrire 0x1025544 chars d'un coup avec printf,
-on va devoir le faire en 2 fois, en écrivant les bytes 2 par 2
-au lieu de 4 par 4.
+on va devoir le faire en 2 fois, en écrivant 2 bytes par 2
+au lieu de 4 par 4, car on a besoin de petites valeurs seulement pour faire ça.
 Si on coupe 0x1025544 en deux, on obtient 0x102 et 0x5544. On peut écrire 
 ça en 2 fois alors que 0x1025544 est trop gros.
 On peut écrire 2 bytes à la fois grâce au spécifieur de taille de printf

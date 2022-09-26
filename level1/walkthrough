@@ -2,7 +2,7 @@ C'est le cas le plus basique possible de buffer overflow:
 un gets sans protection qui nous permet d'overflow,
 et un call qui ouvre un shell dans la fonction run().
 Il suffit donc d'overflow le buffer du main jusqu'à la sauvegarde d'eip sur la stack et d'y mettre l'adresse de run() pour que le ret du main nous envoie dans run().
-_On envoie 76 'A' pour remplir le buffer + écraser la save d'ebp
+_On envoie 76 'A' pour remplir le buffer + la save d'ebp
 _On écrit l'adresse de run() dans la sauvegarde d'eip, soit 0x08048444
 Ce qui nous donne, en gardant stdin ouvert:
 cat <(perl -e 'print "A"x76 . "\x44\x84\x04\x08"') - | ./level1

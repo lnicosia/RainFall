@@ -1,3 +1,9 @@
-atoi("") = 0
-strcmp("", av[1])
--> exec
+Ici pas d'overflow, il faut comprendre le code qui est assez vicieux.
+Le mdp du dernier user est chargé dans un buffer.
+On ecrit un 0 dans ce buffer à la position indiquée dans av[1].
+Si av[1] est identique au buffer (et non au mdp), on ouvre un shell.
+L'astuce consiste à envoyer une chaîne vide, "" dans av[1] car
+atoi("") = 0 et donc buffer[0] = 0.
+Notre buffer est donc une chaine vide aussi.
+strcmp(buffer, av[1]) est donc bien égal à 0, ce qui nous ouvre le shell
+./bonus3 ""

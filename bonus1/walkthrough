@@ -1,5 +1,6 @@
 Ici le code est assez simple à comprendre:
 On a un buffer de 40 octets, un un entier qui doit être égal à 0x574f4c46 pour ouvrir un shell.
+av[1] est atoi dans un entier et av[2] est strcpy dans le buffer.
 Cependant notre memcpy prend comme taille 4 x av[1] mais seulement si av[1] est inférieur à 10.
 On ne peut donc pas dépasser les 40 octets et écraser la valeur de l'entier
 Cependant, de part la manière dont sont représentés les entiers dans la mémoire, lorsqu'on envoie
