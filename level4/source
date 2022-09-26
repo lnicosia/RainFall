@@ -1,3 +1,5 @@
+int m;
+
 void p(char *str)
 {
   printf(str);

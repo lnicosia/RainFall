@@ -1,6 +1,6 @@
+-- level9 -- 
 address heap = 0x804a008
 Ici, le code est en C++, mais ça ne change pas grand chose si on lit l'ASM
-On alloue 108 bytes sur la heap 2x.
 Le call à setAnnotation() permet ensuite d'écrire sur la premier alloc sans
 vérification de taille.
 La difficulté de l'exercice réside dans l'exécution suivant setAnnotation()
@@ -14,9 +14,8 @@ mov    edx,DWORD PTR [eax];	**N2, on déréférence ce qui est situé à N2
 .
 call   edx
 ------------------------------
-Si cela n'est pas évident à apréhender, c'est beaucoup plus simple en plaçant
-des breakpoint et en regardant les valeurs placées dans les registres avant
-le call.
+Si on regarde le code du constructeur de N, on voit que cela revient a call operator+()
+On peut le verifier en breakant au call puis en avancant instruction par instruction
 On constate bien qu'à la première étape, eax prend la l'adresse de N2, 0x804a078
 Cela est situé à 108 bytes de N1 (ce qui correspond bien au new de 108 bytes).
 Pour overflow cette adresse, il faut donc envoyer 108 bytes + ce qui nous intéresse

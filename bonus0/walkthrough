@@ -1,3 +1,4 @@
+-- bonus0 -- 
 Sur cet exo il faut un peu plus de temps pour décortiquer le code
 On a 3 buffers, un dans le main et 2 dans p(). Le programme demande 2 inputs l'un après l'autre.
 Ils sont copiés respectivement dans les 2 buffers de p(). La copie est protégée, 20 bytes seulement,

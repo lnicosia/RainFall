@@ -1,3 +1,4 @@
+-- bonus1 -- 
 Ici le code est assez simple à comprendre:
 On a un buffer de 40 octets, un un entier qui doit être égal à 0x574f4c46 pour ouvrir un shell.
 av[1] est atoi dans un entier et av[2] est strcpy dans le buffer.

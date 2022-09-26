@@ -1,11 +1,13 @@
 void p(void)
 {
+	char unused_stack2[8];
 	uint32_t ret;
-	char buf [76];
+	char buf [64];
+	char unused_stack[28];
 
 	fflush(stdout);
 	gets(buf);
-	ret = $eip;
+	ret = unused_stack + 104 + 4; // Save of eip. 104 = size of the stack + 4 to skip ebp save 
 	if ((ret & 0xb0000000) == 0xb0000000) {
 		printf("(%p)\n", ret);
 		_exit(1);

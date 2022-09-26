@@ -1,3 +1,4 @@
+-- level7 -- 
 Ici le code est un peu plus compliqué. On a 4 malloc et le mot de passe
 qui est lu dans une variable globale <c>.
 On a 2 strcpy de av[1] puis av[2].

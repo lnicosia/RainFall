@@ -8,13 +8,12 @@ void n(void)
 {
   char buf [512];
   
-  fgets(buf, 0x512, stdin);
+  fgets(buf, 512, stdin);
   printf(buf);
   exit(1);
 }
 
 void main(void)
-
 {
   n();
   return;
