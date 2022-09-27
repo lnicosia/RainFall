@@ -1,8 +1,4 @@
-Addresse de GOT de puts sur la stack = 0x8049928
-Avec le premier strcpy on overflow pour ecrire la ou le deuxieme strcpy va chercher dest. On ecrit l'addresse de GOT de puts.
-Avec le deuxieme strcpy on ecrit l'addresse de m() comme ca puts va appeler m().
-
-
+-- level7 -- 
 Ici le code est un peu plus compliqué. On a 4 malloc et le mot de passe
 qui est lu dans une variable globale <c>.
 On a 2 strcpy de av[1] puis av[2].
@@ -10,7 +6,7 @@ Le premier copie à l'adresse écrite 4 bytes après le 1er malloc
 et le deuxième copie à l'adresse écrite 4 bytes après le 3è malloc.
 Il est important de comprendre que les destinations sont les adresses
 écrites à ces endroits et non ces endroits eux-mêmes.
-Cependant avec le premier strcpy on overflow et écrire jusqu'à l'endroit
+Cependant avec le premier strcpy on overflow et écrit jusqu'à l'endroit
 où le 2nd strcpy va prendre son adresse de destination.
 On peut donc remplacer cette adresse par celle que l'on veut.
 En l'occurrence, le call à puts() juste après est parfait pour nous. On a
@@ -18,6 +14,7 @@ juste à override son adresse dans le GOT
 On pourra grâce au 2è strcpy écrire ce que l'on veut à cette adresse
 On a donc 20 chars de padding a ecrire (diff entre le 1er et le 3e malloc)
 et l'adresse de GOT de puts() dans le premier arg
+--Addresse de GOT de puts sur la stack = 0x8049928--
 et la valeur qu'on veut y mettre dans le 2e arg. La fonction m() affiche 
 la variable globale qui contient le mdp, on met donc son adresse.
 Cela nous donne 

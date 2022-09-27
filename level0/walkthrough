@@ -1,2 +1,4 @@
-Une fois le code source reverse, c'est extrèmement simple:
-Si on envoie 423 en argument du programme, un shell est exécuté avec les droits du user voulu.
+-- level0 -- 
+Une fois le code source reverse avec gdb, c'est extrèmement simple:
+Si on envoie 423 en argument du programme,
+un shell est exécuté avec les droits du user voulu.

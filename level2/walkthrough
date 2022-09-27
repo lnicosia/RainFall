@@ -1,19 +1,21 @@
+-- level2 -- 
 Plusieurs méthodes ici, mais chacune devra utiliser un shellcode vu qu'il n'y a aucun call a system/exec etc dans le code. 
 La difficulté de l'exo est qu'on ne peut pas écraser la sauvegarde eip avec une adresse
 commençant par 0xb, sinon le programme exit.
-On a donc peut de choix.
+On a donc peu de choix.
 
 ----- Méthode 1 - La version compliquée -------
 
 Laisser p() return vers le main et écraser la sauvegarde d'eip du main.
+Un peu mieux, faire return p() vers le return du main directement
 Cela nécessite de recopier la sauvegarde d'ebp telle quelle lorsqu'on overflow
-sinon le ret du main va crash.
+sinon le ret de p() va crash.
 Vu que le main va directement ret et donc pop eip, on a pas besoin d'aller overflow le main, eip sera la prochaine valeur qu'on met sur la stack.
 C'est plus simple en exportant le shellcode dans l'env qu'en l'écrivant de le buffer car cela permet de mettre plein de NOP dans l'env et car le buffer est altéré après le gets(), ce qui augmente fortement le risque d'erreur.
 export SHELLCODE=$(perl -e 'print "\x90"x200 . "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80"')
 Pour trouver l'adresse du shellcode dans le programme, on peut faire lors de l'exécution `x/s *((char**)environ)`. Vu que j'exporte avec "SHELLCODE=", il faut rajouter 10 à l'adresse. Lors de l'injection je rajouterai 100 car j'ai mis 200 NOP, je vise le milieu pour avoir le plus de marge possible.
 Voici donc les étapes de cette injection:
-_On envoie du padding jusqu'à arriver à la save d'ebp, soit 76.
+_On envoie du padding jusqu'à arriver à la save d'ebp de p(), soit 76.
 _On réecrit la save d'ebp telle quelle, soit 0xbffff738
 _On réecrit la save d'eip vers l'instruction ret du main pour gagner du temps, soit 0x0804854b
 _On écrit l'adresse du milieu des NOP avant le shellcode dans l'env, soit 0xbffff888

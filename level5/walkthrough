@@ -1,8 +1,9 @@
+-- level5 -- 
 Ici encore, le code source est simple. On récupère notre string avec
 un fgets de 512 puis on la print avec un printf() mal formaté.
 Cependant cette fois ci le programme exit juste après le printf.
-On ne peut vraiment pas éviter ce exit(). Si on disas exit, on se
-rend compte que le programme ne fait que jump sur une valeur constante
+On ne peut vraiment pas éviter ce exit(). Si on reverse exit, on se
+rend compte que le programme ne fait que jump sur une constante
 qui contient le vrai code d'exit:
 Dump of assembler code for function exit@plt:
    0x080483d0 <+0>:	jmp    DWORD PTR ds:0x8049838

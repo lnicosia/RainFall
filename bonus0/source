@@ -19,7 +19,7 @@ void pp(char *str)
 	p(buf1, " - ");
 	p(buf2, " - ");
 	strcpy(str, buf1);
-	str[strlen(str) - 1] = ' ';
+	str[strlen(str)] = ' ';
 	strcat(str, buf2);
 	return;
 }
